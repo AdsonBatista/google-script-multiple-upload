@@ -97,7 +97,7 @@ $('#count-files').text(files_count.toString() + ' file(s) on the queue.');
 }
 );
 function logSheet(){
-    google.script.run.withSuccessHandler(function(e){console.log('logged to sheet')}).logSheet($('#name').val(), $('#email').val().toLowerCase(), $('#code').val().toUpperCase(),Date().toString());
+    google.script.run.withSuccessHandler(function(e){console.log('logged to sheet')}).logSheet($('#name').val().toUpperCase(), $('#email').val().toLowerCase(), $('#code').val().toUpperCase(),Date().toString());
 }
 // Upload the files into a folder in drive
 // This is set to send them all to one folder (specificed in the .gs file)
@@ -130,20 +130,20 @@ function sendFileToDrive(file, first=false) {
     var reader = new FileReader();
     reader.onload = function (e) {
         var content = reader.result;
-        var name = $('#name').val();
-        var user_email = $('#email').val();
-        var code = $('#code').val().toUpperCase();
-        var user_dir_name = code + ' - ' + user_email;
+         var name = $('#name').val().toUpperCase();
+          var user_email = $('#email').val().toLowerCase();
+          var code = $('#code').val().toUpperCase();
+          var user_dir_name = name + ' - ' +code + ' - ' + user_email;
         google.script.run.withSuccessHandler(get_folder_url).uploadFilesToDrive(content, file.name, user_dir_name,first);
     }
     reader.readAsDataURL(file);
 }
       function get_folder_url(e) {
         if (e === "OK") {
-        var name = $('#name').val();
-        var user_email = $('#email').val();
-        var code = $('#code').val().toUpperCase();
-        var user_dir_name = code + ' - ' + user_email;
+           var name = $('#name').val().toUpperCase();
+          var user_email = $('#email').val().toLowerCase();
+          var code = $('#code').val().toUpperCase();
+          var user_dir_name = name + ' - ' +code + ' - ' + user_email;
         google.script.run.withSuccessHandler(showSuccess).get_shared_folders(user_dir_name);
         } else {
           showError(e);

@@ -57,13 +57,14 @@ var new_ss = SpreadsheetApp.create('SANDBOX LOG');
 PropertiesService.getScriptProperties().setProperty('sheet_id', new_ss.getId());
 var ss = SpreadsheetApp.openById(new_ss.getId()); // ID of the spread_sheet
 var sheet = ss.getActiveSheet();
- sheet.appendRow(['Full Name','Code','Email','Time']);
+ sheet.appendRow(['Full Name','Code','Email','Link Folder','Time']);
 }
+
 
 function logSheet(user_name, user_email,user_code, user_time){
  var sheet_id = PropertiesService.getScriptProperties().getProperty('sheet_id');
  var ss = SpreadsheetApp.openById(sheet_id); // ID of the spread_sheet
  var sheet = ss.getActiveSheet();
- var url = get_shared_folders(user_code + ' - ' + user_email);
+ var url = get_shared_folders(user_name + ' - ' + user_code + ' - ' + user_email);
  sheet.appendRow([user_name,user_code, user_email, url, user_time]);
 }
