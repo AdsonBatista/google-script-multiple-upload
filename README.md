@@ -7,8 +7,6 @@ Create 2 files forms.html and server.gs in Google Script Editor (copy and paste 
 Open file server.gs  
 Go to:  
 Run and choose doGet.  
-Run and choose get_shared_folders.   
-Run and choose initSpreadSheet.  
 ### Deploy:
 Go to Publish choose Deploy as Web App   
 In "Execute Script As" choose "Me"  
