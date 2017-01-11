@@ -18,3 +18,4 @@ Just fill the form and select multiple files
 After uploading files, system will return a link, go to that link then check
 Check spreadsheet "SANDBOX LOG" in the "sanbox" folder
 ## Please do not edit credentials information when using this demo project.
+## If you want to contribute, please feel free to make a pull request. We'll help the others.
