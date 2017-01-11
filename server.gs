@@ -53,10 +53,7 @@ function get_shared_folders(user_dir_name){
   }
 }
 function initSpreadSheet(){
-var dropbox = "sandbox"; // Root folder Name, musts be already initialized!
-var folder = DriveApp.getFoldersByName(dropbox).next();
-folder.createFile('SANDBOX LOG', '', MimeType.GOOGLE_SHEETS);
-var new_ss =  folder.createFile('SANDBOX LOG', '', MimeType.GOOGLE_SHEETS);
+var new_ss = SpreadsheetApp.create('SANDBOX LOG');
 PropertiesService.getScriptProperties().setProperty('sheet_id', new_ss.getId());
 var ss = SpreadsheetApp.openById(new_ss.getId()); // ID of the spread_sheet
 var sheet = ss.getActiveSheet();

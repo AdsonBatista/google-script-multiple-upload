@@ -9,6 +9,7 @@ Go to:
 Run and choose doGet.  
 Run and choose initSpreadSheet.  
 ### Deploy:
+Go to you Google Drive root path, move spreadsheet "SANDBOX LOG" into "sandbox" folder.
 Go to Publish choose Deploy as Web App   
 In "Execute Script As" choose "Me"  
 In "Who has accept to the app" choose "Anyone, even Anonymous"  
