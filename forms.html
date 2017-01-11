@@ -12,11 +12,9 @@ Created by Tran Dinh Khang
     <style>
       .disclaimer{width: 480px; color:#646464;margin:20px auto;padding:0 16px;text-align:center;font:400 12px Roboto,Helvetica,Arial,sans-serif}.disclaimer a{color:#009688}#credit{display:none}
       .container-custom{
-
       max-width: 480px;
       margin: 40px auto;
       }
-
     </style>
   </head>
   <body>
@@ -76,7 +74,7 @@ Created by Tran Dinh Khang
         </div>
       </div>
       <div id="success" style="display:none; margin-top: 100px;">
-        <h5 class="left-align teal-text">Files were uploaded</h5>
+        <h5 class="left-align teal-text">Files are uploaded</h5>
         <p>Please check this link <a href="" id="folder-url"></a> edit your files if neccessary.</p>
       </div>
     </form>
@@ -93,19 +91,14 @@ Created by Tran Dinh Khang
 $(document).ready(
 function(){
 $('#files').on('change',function(){
-
 var files_count = this.files.length;
 $('#count-files').text(files_count.toString() + ' file(s) on the queue.');
-
 });
 }
 );
 function logSheet(){
-
     google.script.run.withSuccessHandler(function(e){console.log('logged to sheet')}).logSheet($('#name').val(), $('#email').val().toLowerCase(), $('#code').val().toUpperCase(),Date().toString());
-
 }
-
 // Upload the files into a folder in drive
 // This is set to send them all to one folder (specificed in the .gs file)
 function iteratorFileUpload(callback) {
@@ -145,7 +138,6 @@ function sendFileToDrive(file, first=false) {
     }
     reader.readAsDataURL(file);
 }
-
       function get_folder_url(e) {
         if (e === "OK") {
         var name = $('#name').val();
@@ -165,7 +157,6 @@ function sendFileToDrive(file, first=false) {
  function showError(e) {
         $('#progress').addClass('red-text').html(e);
       }
-
  function showMessage(e) {
         $('#progress').removeClass('red-text').html(e);
       }
