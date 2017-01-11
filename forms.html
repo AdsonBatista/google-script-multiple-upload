@@ -1,0 +1,175 @@
+<!-- 
+Created by Tran Dinh Khang
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_blank">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanbox Upload Project</title>
+
+
+    <style>
+      .disclaimer{width: 480px; color:#646464;margin:20px auto;padding:0 16px;text-align:center;font:400 12px Roboto,Helvetica,Arial,sans-serif}.disclaimer a{color:#009688}#credit{display:none}
+      .container-custom{
+
+      max-width: 480px;
+      margin: 40px auto;
+      }
+
+    </style>
+  </head>
+  <body>
+<div class="container-custom">
+<div class="row">
+          <div class="col s12">
+          <div class="col s5">
+              <img src="https://s-media-cache-ak0.pinimg.com/736x/76/36/6a/76366a0d7093d021b9647c8831a8cfc6.jpg" alt="" class="responsive-img"> <!-- notice the "circle" class -->
+            </div>            <h5 class="center-align teal-text">Sandbox Upload Form</h5>
+            <p class="disclaimer">Created by Tran Dinh Khang</p>
+          </div>
+        </div>
+    <form class="main" id="form" novalidate="novalidate">
+      <div id="forminner">
+
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="name" type="text" name="Name" class="validate" required="" aria-required="true">
+            <label for="name">Full Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+            <input id="email" type="email" name="Email" class="validate" required="" aria-required="true" >
+            <label for="email" data-error="Email không hợp lệ">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">info_outline</i>
+
+
+            <input id="code" type="text" name="code" class="validate" required="" aria-required="true" >
+            <label for="code">Employee Code</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="file-field input-field col s12">
+            <div class="btn" style="width: 100%;">
+              <span>Upload Multiple Files</span>
+              <input id="files" type="file"  multiple >
+            </div>
+            <div id="count-files" style='text-align: center; margin-top: 70px;'></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s6" style="margin: 0 auto;">
+            <button id="submit" class="waves-effect waves-light btn submit-btn"  type="submit" onclick="iteratorFileUpload(function(){logSheet();}); return false;">Confirm</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12" id = "progress">
+          </div>
+        </div>
+      </div>
+      <div id="success" style="display:none; margin-top: 100px;">
+        <h5 class="left-align teal-text">Files is uploaded</h5>
+        <p>Please check this link <a href="" id="folder-url"></a> edit your files if neccessary.</p>
+      </div>
+    </form>
+</div>
+
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+
+<script>
+$(document).ready(
+function(){
+$('#files').on('change',function(){
+
+var files_count = this.files.length;
+$('#count-files').text(files_count.toString() + ' file(s) on the queue.');
+
+});
+}
+);
+function logSheet(){
+
+    google.script.run.withSuccessHandler(function(e){console.log('logged to sheet')}).logSheet($('#name').val(), $('#email').val().toLowerCase(), $('#code').val().toUpperCase(),Date().toString());
+
+}
+
+// Upload the files into a folder in drive
+// This is set to send them all to one folder (specificed in the .gs file)
+function iteratorFileUpload(callback) {
+    var allFiles = document.getElementById('files').files;
+    var name = $('#name').val();
+    var user_email = $('#email').val();
+    var code = $('#code').val().toUpperCase();
+    if (name == "" || user_email == "" || code == "")
+    {
+    alert("Hãy nhập đầy đủ thông tin");
+    return;
+    }
+    if (allFiles.length == 0) {
+        alert('No file selected!');
+    } else {
+       $("#submit").prop("disabled",true).text("Uploading files...");
+       for (var i = 0; i < allFiles.length; i++) {
+            console.log(i);
+            if(i==0)
+            sendFileToDrive(allFiles[i],true);
+            else{
+            sendFileToDrive(allFiles[i]);
+            }
+        }
+    }
+    callback();
+}
+function sendFileToDrive(file, first=false) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var content = reader.result;
+        var name = $('#name').val();
+        var user_email = $('#email').val();
+        var code = $('#code').val().toUpperCase();
+        var user_dir_name = code + ' - ' + user_email;
+        google.script.run.withSuccessHandler(get_folder_url).uploadFilesToDrive(content, file.name, user_dir_name,first);
+    }
+    reader.readAsDataURL(file);
+}
+
+      function get_folder_url(e) {
+        if (e === "OK") {
+        var name = $('#name').val();
+        var user_email = $('#email').val();
+        var code = $('#code').val().toUpperCase();
+        var user_dir_name = code + ' - ' + user_email;
+        google.script.run.withSuccessHandler(showSuccess).get_shared_folders(user_dir_name);
+        } else {
+          showError(e);
+        }
+      }
+       function showSuccess(e) {
+          $('#forminner').hide();
+          $('#folder-url').attr('href',e).html(e);
+          $('#success').show();
+      }
+ function showError(e) {
+        $('#progress').addClass('red-text').html(e);
+      }
+
+ function showMessage(e) {
+        $('#progress').removeClass('red-text').html(e);
+      }
+</script>
+
+</body>
+</html>
