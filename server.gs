@@ -11,7 +11,7 @@ function uploadFilesToDrive(base64Data, fileName, user_dir_name, init_user) {
   {
 
     //    Get root directory
-    var dropbox = "sandbox"; // Root folder Name, musts be already initialized!
+    var dropbox = "Sandbox"; // Root folder Name, musts be already initialized!
     var folder = DriveApp.getFoldersByName(dropbox).next();
     var user_dirs = folder.getFoldersByName(user_dir_name);
     if (!user_dirs.hasNext() && init_user) {
