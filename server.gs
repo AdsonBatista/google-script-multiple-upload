@@ -1,6 +1,7 @@
 /*
 Created by Tran Dinh Khang
 */
+var dropbox = "Sandbox"; // Root folder Name, musts be already initialized!
 
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('forms.html').setTitle("Sandbox Upload Form");
@@ -11,7 +12,6 @@ function uploadFilesToDrive(base64Data, fileName, user_dir_name, init_user) {
   {
 
     //    Get root directory
-    var dropbox = "Sandbox"; // Root folder Name, musts be already initialized!
     var folder = DriveApp.getFoldersByName(dropbox).next();
     var user_dirs = folder.getFoldersByName(user_dir_name);
     if (!user_dirs.hasNext() && init_user) {
@@ -52,12 +52,17 @@ function get_shared_folders(user_dir_name){
 
   }
 }
+// Create SANDBOX LOG in "User Root Folder"
 function initSpreadSheet(){
-var new_ss = SpreadsheetApp.create('SANDBOX LOG');
-PropertiesService.getScriptProperties().setProperty('sheet_id', new_ss.getId());
-var ss = SpreadsheetApp.openById(new_ss.getId()); // ID of the spread_sheet
+var folder = DriveApp.getFoldersByName(dropbox).next();;//gets first folder with the given foldername
+var new_ss = SpreadsheetApp.create('SANDBOX LOG')
+var copyFile=DriveApp.getFileById(new_ss.getId());
+folder.addFile(copyFile);
+PropertiesService.getScriptProperties().setProperty('sheet_id', copyFile.getId());
+var ss = SpreadsheetApp.openById(copyFile.getId()); // ID of the spread_sheet
 var sheet = ss.getActiveSheet();
- sheet.appendRow(['Full Name','Code','Email','Link Folder','Time']);
+sheet.appendRow(['Full Name','Code','Email','Link Folder','Time']);
+DriveApp.getRootFolder().removeFile(copyFile);  
 }
 
 
